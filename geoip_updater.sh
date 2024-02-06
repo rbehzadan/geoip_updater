@@ -13,7 +13,7 @@
 set -e
 
 # Define variables
-DATE=$(date -I)
+DATE=${1:-$(date -I)}
 DEST_DIR="/usr/local/share/GeoIP"
 FN="GeoLite2-City-${DATE//-/}.tar.gz"
 URL="https://github.com/merkez/maxmind-databases/releases/download/${DATE}/${FN}"
