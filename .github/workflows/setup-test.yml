@@ -1,0 +1,34 @@
+name: Test Setup Script
+
+on: push
+
+jobs:
+  test-setup:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+
+    - name: Set up environment
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y wget curl tar
+
+    - name: Execute setup.sh
+      run: |
+        chmod +x setup.sh
+        ./setup.sh
+      env:
+        USER: ${{ github.actor }}
+
+    - name: Verify directory creation
+      run: test -d /usr/local/share/GeoIP
+
+    - name: Verify crontab entries
+      run: |
+        CRON_ENTRIES=$(crontab -l | grep -c 'geoip_updater.sh')
+        if [ "$CRON_ENTRIES" -ne 3 ]; then
+          echo "Expected 3 crontab entries for geoip_updater.sh, found $CRON_ENTRIES"
+          exit 1
+        fi
