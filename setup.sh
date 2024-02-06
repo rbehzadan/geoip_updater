@@ -29,14 +29,15 @@ sudo chmod 775 "$DEST_DIR"
 sudo cp "$SCRIPT_NAME" "$SCRIPT_PATH"
 sudo chmod +x "$SCRIPT_PATH"
 
-# Step 5: Add a crontab entry (if it doesn't already exist)
-# Create temporary crontab file
-crontab -l > /tmp/current_crontab
-if ! grep -Fq "$SCRIPT_NAME" /tmp/current_crontab; then
-    echo "$CRON_SCHEDULE $CRON_CMD" >> /tmp/current_crontab
-    crontab /tmp/current_crontab
-fi
+# Step 5: Remove existing crontab entries for geoip_updater.sh, then add new
+#         entries for 2 days ago, yesterday, and today
+crontab -l | grep -v "$SCRIPT_NAME" > /tmp/current_crontab
+echo "$CRON_SCHEDULE $SCRIPT_PATH \$(date -I -d '2 days ago') >> $LOG_FILE 2>&1" >> /tmp/current_crontab
+echo "$CRON_SCHEDULE $SCRIPT_PATH \$(date -I -d 'yesterday') >> $LOG_FILE 2>&1" >> /tmp/current_crontab
+echo "$CRON_SCHEDULE $SCRIPT_PATH \$(date -I -d 'today') >> $LOG_FILE 2>&1" >> /tmp/current_crontab
+crontab /tmp/current_crontab
 rm /tmp/current_crontab
+
 
 # Step 6: Ensure log file exists and is writable
 sudo touch "$LOG_FILE"
