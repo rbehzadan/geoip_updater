@@ -24,7 +24,7 @@ DEST="${DEST_DIR}/GeoLite2-City-${DATE//-/}.mmdb"
 check_if_file_is_already_downloaded() {
   if [ -e "$DEST" ]; then
     echo "File is already on the local filesystem"
-    ensure_symlink_exists
+    # ensure_symlink_exists
     exit 0
   fi
 }
