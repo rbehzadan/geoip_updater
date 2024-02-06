@@ -61,13 +61,19 @@ download_geoip_package() {
 
 # Extract the MMDB file from the downloaded package
 extract_mmdb() {
-  MMDB_PATH=$(tar -tzf "/tmp/${FN}" | grep "${MMDB}" || true)
+  # Ensure extraction occurs in a temporary directory to avoid leaving behind unwanted folders
+  pushd /tmp >/dev/null
+  MMDB_PATH=$(tar -tzf "${FN}" | grep "${MMDB}" || true)
   if [ -n "$MMDB_PATH" ]; then
-    tar -xzf "/tmp/${FN}" "${MMDB_PATH}" && mv "$MMDB_PATH" $DEST
+    tar -xzf "${FN}" "${MMDB_PATH}" && mv "${MMDB_PATH}" "$DEST"
   else
     echo "Failed to find ${MMDB} in the tarball." >&2
+    popd >/dev/null
     exit 1
   fi
+  # Cleanup the temporary directory by removing any extracted directories
+  rm -rf "$(dirname "${MMDB_PATH}")"
+  popd >/dev/null
 }
 
 # Clean up the temporary files
