@@ -1,9 +1,8 @@
 # GeoIP Database Updater Script
 
-This guide provides instructions on how to automate the process of checking for
-new releases of GeoIP databases on GitHub, downloading them if they're not
-already present, and updating the local database files for use with the
-`geoip_updater.sh` script.
+This script, automates the process of checking for new releases of GeoIP
+databases on [GitHub](https://github.com/merkez/maxmind-databases), downloading them if they're not already present, and
+updating the local database files for use.
 
 ## Prerequisites
 
@@ -48,3 +47,5 @@ Optionally, you can specify a date as an argument to manually check and download
 - If the script does not run as scheduled, ensure that the `crontab` entries are set correctly and that `geoip_updater.sh` is executable.
 - Check the log file `/var/log/geoip_update.log` for any errors or messages output by the script.
 
+## Acknowledgements
+I would like to extend my sincere gratitude to [ChatGPT](https://chat.openai.com/) for providing extensive help in writing, checking, and documenting this project. The guidance and support received were invaluable in ensuring the quality and reliability of the scripts and documentation. Thank you for being an integral part of this project's development.
